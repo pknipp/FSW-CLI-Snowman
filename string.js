@@ -22,10 +22,10 @@ function game() {
   let n = Math.floor(dictionary.length * Math.random());
   let word = dictionary[n];
   let nLetters = word.length;
-  let stats = {numberOfGuesses: 6, previouslyGuessed: []};
-  let workingArray = new Array(nLetters).fill("_");
-  let workingString = workingArray.join("");
-  while (workingString !== word && stats.numberOfGuesses) {
+  let maxGuesses = 6;
+  let stats = {numberOfGuesses: maxGuesses, previouslyGuessed: []};
+  let workingString = "_".repeat(nLetters);
+  while (stats.numberOfGuesses) {
     console.log(workingString);
     console.log("Guessed letters: ", stats.previouslyGuessed.join());
     console.log("You have ", stats.numberOfGuesses, "guesses remaining.");
