@@ -20,30 +20,27 @@ function getValidLetterGuess() {
 
 function game() {
   let n = Math.floor(dictionary.length * Math.random());
-  let word = dictionary[n].split("");
+  let word = dictionary[n];
   let nLetters = word.length;
   let maxGuesses = 6;
   let stats = {numberOfGuesses: maxGuesses, previouslyGuessed: []};
-  let workingArray = new Array(nLetters).fill("_");
+  let workingString = "_".repeat(nLetters);
   while (stats.numberOfGuesses) {
-    console.log(workingArray.join(""));
+    console.log(workingString);
     console.log("Guessed letters: ", stats.previouslyGuessed.join());
     console.log("You have ", stats.numberOfGuesses, "guesses remaining.");
     let letter = getValidLetterGuess();
     stats.previouslyGuessed.push(letter);
     let foundOne = false;
-    let isSame = true;
     for (let i = 0; i < nLetters; i++) {
       if (letter === word[i]) {
-        workingArray[i] = letter;
+        workingString = workingString.slice(0,i) + letter + workingString.slice(i + 1);
         foundOne = true;
-      } else {
-        if (workingArray[i] !== word[i]) isSame = false;
       }
     }
     if (!foundOne) stats.numberOfGuesses--;
-    if (isSame) {
-      console.log("You guessed the word (",word.join(""),") with ", stats.numberOfGuesses, "guesses remaining.");
+    if (workingString === word) {
+      console.log("You guessed the word (",word,") with ", stats.numberOfGuesses, "guesses remaining.");
       return;
     }
   }
