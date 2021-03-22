@@ -20,31 +20,36 @@ function getValidLetterGuess() {
 
 function game() {
   let n = Math.floor(dictionary.length * Math.random());
-  let word = dictionary[n];
-  let nLetters = word.length;
+  let wordString = dictionary[n];
+  let nLetters = wordString.length;
+  let wordObject = {};
+  for (let i = 0; i < nLetters; i++) {
+    if (!(wordString[i] in wordObject)) wordObject[wordString[i]] = null;
+  }
   let maxGuesses = 6;
-  let stats = {numberOfGuesses: maxGuesses, previouslyGuessed: []};
+  let stats = {numberOfGuesses: maxGuesses, previouslyGuessed: {}};
   let workingString = "_".repeat(nLetters);
   while (stats.numberOfGuesses) {
     console.log(workingString);
-    console.log("Guessed letters: ", stats.previouslyGuessed.join());
+    console.log("Guessed letters: ", Object.keys(stats.previouslyGuessed).join());
     console.log("You have ", stats.numberOfGuesses, "guesses remaining.");
     let letter = getValidLetterGuess();
-    stats.previouslyGuessed.push(letter);
-    let foundOne = false;
-    for (let i = 0; i < nLetters; i++) {
-      if (letter === word[i]) {
-        workingString = workingString.slice(0,i) + letter + workingString.slice(i + 1);
-        foundOne = true;
+    stats.previouslyGuessed[letter] = null;
+    if (letter in wordObject) {
+      for (let i = 0; i < nLetters; i++) {
+        if (wordString[i] === letter) {
+          workingString = workingString.slice(0, i) + letter + workingString.slice(i + 1);
+        }
       }
+    } else {
+      stats.numberOfGuesses--;
     }
-    if (!foundOne) stats.numberOfGuesses--;
-    if (workingString === word) {
-      console.log("You guessed the word (",word,") with ", stats.numberOfGuesses, "guesses remaining.");
+    if (wordString === workingString) {
+      console.log("You guessed the word (",wordString,") with ", stats.numberOfGuesses, "guesses remaining.");
       return;
     }
   }
-  console.log("You lose. The word was", word,".");
+  console.log("You lose. The word was", wordString,".");
 }
 
 game();
